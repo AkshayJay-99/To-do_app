@@ -17,7 +17,7 @@ class Todo(db.Model):
     def __repr__(self) -> str:
         return f"{self.sno} - {self.title}"
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['POST','GET'])
 def hello_world():
     if request.method=='POST':
         title = request.form['title']
@@ -43,7 +43,7 @@ def delete(sno):
     db.session.commit()
     return redirect('/')
 
-@app.route('/update/<int:sno>',methods=['GET', 'POST'])
+@app.route('/update/<int:sno>',methods=['POST','GET'])
 def update(sno):
     if request.method=='POST':
         title = request.form['title']
@@ -53,6 +53,7 @@ def update(sno):
         todo.desc=desc
         db.session.add(todo)
         db.session.commit()
+        return redirect('/')
 
     todo = Todo.query.filter_by(sno=sno).first()
     return render_template('update.html', todo=todo)
